@@ -11,6 +11,5 @@ This project implements a Node.js REST API for the /bfhl POST route as per the r
 You can deploy this project to Vercel, Railway, or Render. See their documentation for details.
 
 ## Author
-- Email: john@xyz.com
-- Roll Number: ABCD123
-- User ID: john_doe_17091999 (replace with your details)
+- Name: D.Hemanth
+- Email: hemanthsankarreddy@gmail.com
