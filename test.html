@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BFHL API Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+        button { padding: 10px 20px; margin: 5px; background: #007cba; color: white; border: none; cursor: pointer; }
+        .response { background: #f5f5f5; padding: 10px; margin: 10px 0; white-space: pre-wrap; }
+        input[type="text"] { width: 300px; padding: 5px; }
+    </style>
+</head>
+<body>
+    <h1>BFHL API Tester</h1>
+    
+    <div class="test-section">
+        <h3>Custom Test</h3>
+        <input type="text" id="customInput" placeholder='Enter array like: ["a","1","334","4","R","$"]' value='["a","1","334","4","R","$"]'>
+        <button onclick="testCustom()">Test Custom Input</button>
+        <div id="customResponse" class="response"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Example A</h3>
+        <button onclick="testExampleA()">Test Example A</button>
+        <div id="responseA" class="response"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Example B</h3>
+        <button onclick="testExampleB()">Test Example B</button>
+        <div id="responseB" class="response"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Example C</h3>
+        <button onclick="testExampleC()">Test Example C</button>
+        <div id="responseC" class="response"></div>
+    </div>
+
+    <script>
+        async function makeRequest(data, responseId) {
+            try {
+                const response = await fetch('http://localhost:3000/bfhl', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ data })
+                });
+                const result = await response.json();
+                document.getElementById(responseId).textContent = 
+                    'Request: ' + JSON.stringify({ data }, null, 2) + '\n\n' +
+                    'Response: ' + JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById(responseId).textContent = 'Error: ' + error.message;
+            }
+        }
+
+        function testCustom() {
+            try {
+                const input = document.getElementById('customInput').value;
+                const data = JSON.parse(input);
+                makeRequest(data, 'customResponse');
+            } catch (error) {
+                document.getElementById('customResponse').textContent = 'Invalid JSON: ' + error.message;
+            }
+        }
+
+        function testExampleA() {
+            makeRequest(["a","1","334","4","R", "$"], 'responseA');
+        }
+
+        function testExampleB() {
+            makeRequest(["2","a", "y", "4", "&", "-", "*", "5","92","b"], 'responseB');
+        }
+
+        function testExampleC() {
+            makeRequest(["A","ABcD","DOE"], 'responseC');
+        }
+    </script>
+</body>
+</html>
